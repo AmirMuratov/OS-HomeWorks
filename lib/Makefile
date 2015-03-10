@@ -3,7 +3,7 @@
 #	LD_LIBRARY_PATH=$PWD:$(LD_LIBRARY_PATH) ./test
 
 make: clean helpers.o
-	gcc -std=c99 -shared -o libhelpers.so  helpers.o
+	gcc -shared -o libhelpers.so  helpers.o
 
 clean:
 	rm -f helpers.o
@@ -11,4 +11,4 @@ clean:
 	rm -f test
 
 helpers.o:
-		gcc -c -fPIC helpers.c -o $@
+	gcc -c -fPIC -std=c99 -o $@ helpers.c
