@@ -1,9 +1,5 @@
-#test: make
-#	gcc -std=c99 -L$(PWD) -Wall test.c -o test -lhelpers
-#	LD_LIBRARY_PATH=$PWD:$(LD_LIBRARY_PATH) ./test
-
 make: clean helpers.o
-	gcc -shared -o libhelpers.so  helpers.o
+	gcc -shared -std=c99 -o libhelpers.so  helpers.o
 
 clean:
 	rm -f helpers.o
