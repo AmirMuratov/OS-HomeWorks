@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-size_t const buff_size = 4096;
+size_t const buff_size = 4097;// (4096) + ' '
 
 int main() {
 	char buffer[buff_size];
