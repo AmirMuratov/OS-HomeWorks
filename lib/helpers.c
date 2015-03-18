@@ -7,7 +7,7 @@ ssize_t read_until(int fd, void * buffer, size_t count, char delimiter) {
 	ssize_t res = read(fd, buffer, count);
 	while (res > 0) {
 		int ok = 0;
-		for (int i = bytes_read; i < res; i++) {
+		for (int i = bytes_read; i < bytes_read + res; i++) {
 			if (*((char*)buffer + i)  == delimiter) {
 				ok = 1;
 				break;
