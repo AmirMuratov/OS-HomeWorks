@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 
-size_t const buff_size = 8192;
+size_t const buff_size = 4096;
 
 int main() {
 	char buffer[buff_size];
@@ -11,7 +11,7 @@ int main() {
 	ssize_t bytes_num = 1;
 	int shift = 0;
 	while (1) {
-		bytes_num = read_until(STDIN_FILENO, buffer + shift, buff_size, ' ');	
+		bytes_num = read_until(STDIN_FILENO, buffer + shift, buff_size - shift, ' ');	
 		if (bytes_num <= 0) {
 			break;
 		}
