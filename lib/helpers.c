@@ -1,6 +1,20 @@
 #include "helpers.h"
 #include <stdio.h>
-#include <unistd.h>
+
+int spawn(const char * file, char * const argv []) {
+	int pid = fork();
+	if (pid == 0) {
+		exit(execvp(file, argv));
+    } else {
+    	if (pid < 0) {
+        	return -1;
+    	}
+        int status;
+        wait(&status);
+        return status;
+    }
+}
+
 
 ssize_t read_until(int fd, void * buffer, size_t count, char delimiter) {
 	size_t bytes_read = 0;

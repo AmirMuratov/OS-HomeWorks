@@ -8,3 +8,4 @@ clean:
 
 helpers.o:
 	gcc -c -fPIC -std=c99 -o $@ helpers.c
+
