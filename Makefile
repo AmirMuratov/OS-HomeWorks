@@ -3,3 +3,4 @@ make_all:
 	make -C cat
 	make -C revwords
 	make -C filter
+	make -C bufcat
