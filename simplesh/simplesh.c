@@ -66,7 +66,6 @@ void parse(char* str, int len, char **result) {
 }
 	
 void sig_handler(int sig) {
-
 }
 
 int main() {
@@ -78,20 +77,21 @@ int main() {
         return 1;
     }
 		
-
-	struct buf_t *in = buf_new(BUFF_SIZE);
+    struct buf_t* in = buf_new(BUFF_SIZE);
 	char buf[BUFF_SIZE];
 	while (1) {
 		if (write(STDOUT_FILENO, "$", 1) < 0) {
 			return 1;
 		}
 		int bytes_read = buf_getline(STDIN_FILENO, in, buf);
-		//printf("%s\n%d\n", buf, bytes_read);
-		if (bytes_read == 0) {
+		if (bytes_read == -2) {
 			return 0;
 		}
-		if (bytes_read < 0) {
-			return 1;
+		if (bytes_read <= 0) {
+			if (write(STDOUT_FILENO, "\n", 1) < 0) {
+				return 1;
+			}
+			continue;
 		}
 		int n = normalize_str(buf, &bytes_read);
 		char* args[n][MAX_NUMBER_OF_ARGS];
@@ -105,17 +105,6 @@ int main() {
 				last = i + 1;			
 			}
 		}
-		/*printf("%d\n", n);
-		for (int i = 0; i < n; i++) {
-			int j = 0;
-			while (args[i][j] != NULL) {
-				printf("%s\n", args[i][j]);
-				j++;
-			}
-			printf("------------\n");
-		}
-		printf("------------\n");
-		*/
 		execargs_t* programs[n];
 		for (int i = 0; i < n; i++) {
 			programs[i] = execargs_t_new(args[i]);

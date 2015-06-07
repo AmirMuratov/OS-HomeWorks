@@ -103,10 +103,12 @@ ssize_t buf_getline(fd_t fd, struct buf_t* buf, char* dest) {
     while (1) {
         size_t read_size = read(fd, buf->buffer, buf->capacity);
         if (read_size == -1) {
+            buf->size = 0;
             return -1;
         }
         if (read_size == 0) {
-            return len;
+            buf->size = 0;
+            return -2;
         }
         buf->size = read_size;
         for (int i = 0; i < buf->size; i++) {

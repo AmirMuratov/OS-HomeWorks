@@ -46,7 +46,7 @@ int runpiped(execargs_t** programs, size_t n) {
 	childa = (int *)childs;
 	for (int i = 0; i < n; i++) {
 		int curpipe[2];
-		if (pipe(curpipe) == -1) {
+		if (pipe2(curpipe, O_CLOEXEC) == -1) {
 			return -1;
 		}
 		int pid = fork();
@@ -58,7 +58,7 @@ int runpiped(execargs_t** programs, size_t n) {
 			if (i != n - 1) {
 				dup2(curpipe[1], STDOUT_FILENO);
 			}
-			_exit(exec(programs[i]));
+			_exit(execvp(programs[i]->args[0], programs[i]->args));
 		}
 		close(curpipe[1]);
 		if (i != 0) {
@@ -67,7 +67,6 @@ int runpiped(execargs_t** programs, size_t n) {
 		infd = curpipe[0];
 		childs[i] = pid;
 	}
-	
 	size = n;
 	
 	struct sigaction act;
