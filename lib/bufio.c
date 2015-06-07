@@ -79,3 +79,46 @@ ssize_t buf_flush(fd_t fd, struct buf_t *buf, size_t required) {
         }
     }
 }
+
+
+
+ssize_t buf_getline(fd_t fd, struct buf_t* buf, char* dest) {
+    #ifdef DEBUG
+        if (buf == NULL) {
+            abort();
+        }
+    #endif
+    int len = 0;
+    for (int i = 0; i < buf->size; i++) {
+        if (buf->buffer[i] == '\n') {
+            for (int j = i + 1; j < buf->size; j++) {
+                buf->buffer[j - (i + 1)] = buf->buffer[j];
+            }
+            buf->size = buf->size - i - 1;
+            return len;
+        }
+        dest[len] = buf->buffer[i];
+        len++;
+    }
+    while (1) {
+        size_t read_size = read(fd, buf->buffer, buf->capacity);
+        if (read_size == -1) {
+            return -1;
+        }
+        if (read_size == 0) {
+            return len;
+        }
+        buf->size = read_size;
+        for (int i = 0; i < buf->size; i++) {
+            if (buf->buffer[i] == '\n') {
+                for (int j = i + 1; j < buf->size; j++) {
+                    buf->buffer[j - (i + 1)] = buf->buffer[j];
+                }
+                buf->size = buf->size - i - 1;
+                return len;
+            }
+            dest[len] = buf->buffer[i];
+            len++;        
+        }
+    }
+}

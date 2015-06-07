@@ -4,3 +4,4 @@ make_all:
 	make -C revwords
 	make -C filter
 	make -C bufcat
+	make -C simplesh
